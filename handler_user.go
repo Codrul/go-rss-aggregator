@@ -41,3 +41,28 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 	respondWithJSON(w, 201, user)
 
 }
+
+
+func (apiCfg *apiConfig) handlerGetAllUsers(w http.ResponseWriter, r *http.Request) {
+	type User struct {
+		Id string `json:"id"`
+		UserName string `json:"user_name"`
+	}
+
+	users, err := apiCfg.DB.GetAllUsers(r.Context())
+	if err != nil {
+		respondWithError(w, 500, fmt.Sprintf("Error getting users: %s", err))
+	}
+
+	response := []User{}
+
+	for _, user := range users {
+		response = append(response, User{
+			Id: user.ID.String(),
+			UserName: user.UserName,
+		})
+	}
+
+	respondWithJSON(w, 200, response)
+
+}
