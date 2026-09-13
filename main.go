@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	// internal packages
 	"github.com/Codrul/go-rss-aggregator/internal/database"
+	"github.com/Codrul/go-rss-aggregator/api"
 
 	// external packages
 	"github.com/go-chi/chi/v5"
@@ -15,9 +16,6 @@ import (
 	_ "github.com/lib/pq" // _ here means we don't call this directly in the code
 )
 
-	type apiConfig struct {
-		DB *database.Queries
-	}
 
 
 func main(){
@@ -40,7 +38,7 @@ func main(){
 		log.Fatal("Can't connect to the database:", err)
 	}
 
-	apiCfg := apiConfig{
+	apiCfg := api.ApiConfig{
 		DB: database.New(conn),
 	}
 
@@ -60,10 +58,10 @@ func main(){
 	}
 
 	v1Router := chi.NewRouter()
-	v1Router.Get("/health", handlerReadiness)
-	v1Router.Get("/err", handlerErr)
-	v1Router.Post("/users", apiCfg.handlerCreateUser)
-	v1Router.Get("/all-users", apiCfg.handlerGetAllUsers)
+	v1Router.Get("/health", api.HandlerReadiness)
+	v1Router.Get("/err", api.HandlerErr)
+	v1Router.Post("/users", apiCfg.HandlerCreateUser)
+	v1Router.Get("/all-users", apiCfg.HandlerGetAllUsers)
 
 
 

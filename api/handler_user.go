@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"encoding/json"
@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Codrul/go-rss-aggregator/internal/database"
 	"github.com/google/uuid"
+	"github.com/Codrul/go-rss-aggregator/internal/database"
 )
 
-func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) {
+func (ApiCfg *ApiConfig) HandlerCreateUser(w http.ResponseWriter, r *http.Request) {
 
 	type parameters struct {
 		UserName string `json:"user_name"`
@@ -21,11 +21,11 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 	params := parameters{}
 	err := decoder.Decode(&params)
 	if err !=nil {
-		respondWithError(w, 400, fmt.Sprintf("Error parsing JSON: %s", err))
+		RespondWithError(w, 400, fmt.Sprintf("Error parsing JSON: %s", err))
 		return
 	}
 
-	user, err := apiCfg.DB.CreateUser(r.Context(), database.CreateUserParams{
+	user, err := ApiCfg.DB.CreateUser(r.Context(), database.CreateUserParams{
 		ID: uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
@@ -33,25 +33,25 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		
 	})
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("Couldn't create user:%s", err))
+		RespondWithError(w, 400, fmt.Sprintf("Couldn't create user:%s", err))
 		return
 	}
 
 
-	respondWithJSON(w, 201, user)
+	RespondWithJSON(w, 201, user)
 
 }
 
 
-func (apiCfg *apiConfig) handlerGetAllUsers(w http.ResponseWriter, r *http.Request) {
+func (ApiCfg *ApiConfig) HandlerGetAllUsers(w http.ResponseWriter, r *http.Request) {
 	type User struct {
 		Id string `json:"id"`
 		UserName string `json:"user_name"`
 	}
 
-	users, err := apiCfg.DB.GetAllUsers(r.Context())
+	users, err := ApiCfg.DB.GetAllUsers(r.Context())
 	if err != nil {
-		respondWithError(w, 500, fmt.Sprintf("Error getting users: %s", err))
+		RespondWithError(w, 500, fmt.Sprintf("Error getting users: %s", err))
 	}
 
 	response := []User{}
@@ -63,6 +63,6 @@ func (apiCfg *apiConfig) handlerGetAllUsers(w http.ResponseWriter, r *http.Reque
 		})
 	}
 
-	respondWithJSON(w, 200, response)
+	RespondWithJSON(w, 200, response)
 
 }
