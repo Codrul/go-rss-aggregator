@@ -45,3 +45,17 @@ func (ApiCfg *ApiConfig) HandlerCreateFeed(w http.ResponseWriter, r *http.Reques
 
 }
 
+
+func (ApiCfg *ApiConfig) HandlerGetFeeds(w http.ResponseWriter, r *http.Request){
+
+	feeds, err := ApiCfg.DB.GetFeeds(r.Context())
+	if err != nil {
+		RespondWithError(w, 400, fmt.Sprintf("Couldn't get feeds: %s", err))
+		return
+	}
+
+	RespondWithJSON(w, 200, databaseFeedsToFeeds(feeds))
+}
+
+
+
