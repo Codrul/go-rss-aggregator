@@ -66,3 +66,19 @@ func (ApiCfg *ApiConfig) HandlerGetAllUsers(w http.ResponseWriter, r *http.Reque
 	RespondWithJSON(w, 200, response)
 
 }
+
+
+func (ApiCfg *ApiConfig) HandlerGetUser(w http.ResponseWriter, r *http.Request) {
+}
+
+
+
+
+
+
+
+
+
+
+
+
