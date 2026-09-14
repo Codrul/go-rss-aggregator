@@ -8,7 +8,7 @@ import (
 
 
 /*
-* Authorization: ApiKey
+* Authorization: ApiKey {actual api key here}
 */
 func GetAPIKey(headers http.Header) (string, error) {
 	val := headers.Get("Authorization")

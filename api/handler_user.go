@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/Codrul/go-rss-aggregator/internal/database"
+	"github.com/google/uuid"
 )
 
 func (ApiCfg *ApiConfig) HandlerCreateUser(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +38,7 @@ func (ApiCfg *ApiConfig) HandlerCreateUser(w http.ResponseWriter, r *http.Reques
 	}
 
 
-	RespondWithJSON(w, 201, user)
+	RespondWithJSON(w, 201, databaseUserToUser(user))
 
 }
 
@@ -68,7 +68,8 @@ func (ApiCfg *ApiConfig) HandlerGetAllUsers(w http.ResponseWriter, r *http.Reque
 }
 
 
-func (ApiCfg *ApiConfig) HandlerGetUser(w http.ResponseWriter, r *http.Request) {
+func (ApiCfg *ApiConfig) HandlerGetUser(w http.ResponseWriter, r *http.Request, user database.User){
+		RespondWithJSON(w, 200, databaseUserToUser(user))
 }
 
 
